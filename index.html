@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ballot Check: know your November ballot</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+:root{--bg:#eef2f5;--card:#fff;--ink:#1c2b3f;--mute:#566576;--line:#c9d3dc;--accent:#1f4e8c;--mark:#b3261e;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141b24;--card:#1d2733;--ink:#e8edf2;--mute:#9fb0c0;--line:#33424f;--accent:#7fb0ee;--mark:#ff8a80;--on:#10202f}}
+:root[data-theme="dark"]{--bg:#141b24;--card:#1d2733;--ink:#e8edf2;--mute:#9fb0c0;--line:#33424f;--accent:#7fb0ee;--mark:#ff8a80;--on:#10202f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:28px 18px 56px}
+h1{font-size:2.1rem;line-height:1.15;margin:0 0 10px}
+h2{font-size:1.2rem;margin:0 0 10px}
+p{margin:0 0 12px}
+.lead{color:var(--mute);font-size:1.05rem}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:20px;margin-top:18px}
+label.f{display:block;font-weight:700;margin-bottom:6px}
+input[type=text]{width:100%;font:inherit;padding:12px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+input[type=text]:focus,button:focus-visible,a:focus-visible,.opt:focus-within{outline:3px solid var(--accent);outline-offset:2px}
+.note{font-size:.9rem;color:var(--mute)}
+.opts{display:grid;gap:10px;margin:6px 0 14px}
+.opt{display:flex;gap:12px;align-items:flex-start;border:2px solid var(--line);border-radius:8px;padding:12px;cursor:pointer}
+.opt input{position:absolute;opacity:0}
+.bub{flex:none;width:22px;height:22px;border:2px solid var(--ink);border-radius:50%;margin-top:3px}
+.opt input:checked~.bub{background:var(--mark);border-color:var(--mark);box-shadow:inset 0 0 0 4px var(--card)}
+.opt:has(input:checked){border-color:var(--accent)}
+.opt b{display:block}
+.opt span.d{color:var(--mute);font-size:.92rem}
+button,.btn{font:inherit;font-weight:700;background:var(--accent);color:var(--on);border:0;border-radius:8px;padding:12px 18px;cursor:pointer;text-decoration:none;display:inline-block}
+button.alt{background:transparent;color:var(--accent);border:2px solid var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:10px}
+textarea{width:100%;min-height:220px;font:.85rem/1.5 ui-monospace,Menlo,Consolas,monospace;padding:12px;border:2px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);margin:12px 0}
+ul.src{padding-left:20px;margin:0}
+ul.src li{margin-bottom:8px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<h1>Ballot Check</h1>
+<p class="lead">Enter your address, copy the research brief this page builds for you, and paste it into the AI assistant you already use (ChatGPT, Claude, or Gemini, with web search on). You get a plain summary of everyone on your November 3, 2026 ballot: their record, who funds them, and whether they keep their promises.</p>
+
+<section>
+<h2>1. Where do you vote?</h2>
+<label class="f" for="addr">Street address, city, state, ZIP</label>
+<input type="text" id="addr" placeholder="123 Main St, Houston, TX 77002" autocomplete="street-address">
+<p class="note" style="margin-top:8px">Your address stays in this page. It is only added to the text you copy below. A ZIP code works, but a full address finds your exact local races.</p>
+</section>
+
+<section>
+<h2>2. Start with the official ballot</h2>
+<p>Look up the real list of races and measures first. These are free and nonpartisan.</p>
+<div class="row">
+<a class="btn" href="https://www.vote411.org/ballot" target="_blank" rel="noopener">Vote411 ballot</a>
+<a class="btn alt" href="https://ballotpedia.org/Sample_Ballot_Lookup" target="_blank" rel="noopener">Ballotpedia lookup</a>
+<a class="btn alt" href="https://vote.gov" target="_blank" rel="noopener">Vote.gov</a>
+</div>
+</section>
+
+<section>
+<h2>3. Get your research brief</h2>
+<p>Pick a length, copy the text, and paste it into an AI assistant that has web search on (Claude, ChatGPT, Gemini).</p>
+<div class="opts" role="radiogroup" aria-label="Brief length">
+<label class="opt"><input type="radio" name="len" value="quick" checked><span class="bub"></span><span><b>Quick answers</b><span class="d">One screen per race: who is running, the money, and a plain verdict on record and honesty.</span></span></label>
+<label class="opt"><input type="radio" name="len" value="full"><span class="bub"></span><span><b>Full research</b><span class="d">Records, debate behavior, donors, promises kept, endorsements, and ballot measures in depth.</span></span></label>
+</div>
+<button id="make">Build my brief</button>
+<div id="out" hidden>
+<textarea id="txt" readonly aria-label="Your research brief"></textarea>
+<div class="row"><button id="copy">Copy text</button><span id="msg" class="note" role="status" style="align-self:center"></span></div>
+</div>
+</section>
+
+<section>
+<h2>Check the AI's numbers yourself</h2>
+<ul class="src">
+<li><a href="https://www.fec.gov" target="_blank" rel="noopener">FEC.gov</a> and <a href="https://www.opensecrets.org" target="_blank" rel="noopener">OpenSecrets</a>: federal campaign money</li>
+<li><a href="https://www.followthemoney.org" target="_blank" rel="noopener">FollowTheMoney</a>: state and local donors</li>
+<li><a href="https://www.politifact.com" target="_blank" rel="noopener">PolitiFact</a> and <a href="https://www.factcheck.org" target="_blank" rel="noopener">FactCheck.org</a>: claims and promises</li>
+<li><a href="https://justfacts.votesmart.org" target="_blank" rel="noopener">Vote Smart</a>: voting records and candidate answers</li>
+</ul>
+<p class="note" style="margin-top:12px">AI can make mistakes. Confirm dates, deadlines, and your polling place with your county elections office.</p>
+</section>
+</main>
+<script>
+var RULES = "RULES: Stay strictly nonpartisan and apply the same scrutiny to every candidate. Cite a link for every factual claim, preferring primary sources (FEC filings, voting records, official transcripts). If something cannot be found, write 'No reliable information found' instead of guessing. Separate facts from claims made by a campaign or its opponents. Use plain language. Do not tell me who to vote for.";
+function brief(addr, len){
+  var head = "You are a nonpartisan voter-research assistant. Use web search. My address is: " + addr + ".\n\nFirst, find my exact ballot for the November 3, 2026 election (federal, state, county, city, school board, judges, and ballot measures) using Vote411.org, Ballotpedia, and my county elections office. List every race and measure.\n\n";
+  if(len==="quick"){
+    return head + "Then, for each race, give me a SHORT summary (about 120 words per candidate max):\n- Who they are (incumbent or challenger, party, background)\n- Record: 2-3 most important votes, actions, or past jobs\n- Style: do they mostly answer questions directly or attack opponents? One example.\n- Money: total raised, biggest donors or industries, share from small donors vs PACs, corporations, unions\n- Promises: kept, broken, or no track record\n- One red flag or fact-check, if any\n\nFor each ballot measure: what YES does, what NO does, who funds each side.\nEnd each race with a 3-row comparison table and finish with my voting dates, deadlines, ID rules, and polling place.\n\n" + RULES;
+  }
+  return head + "Then research EVERY candidate in EVERY race and cover:\n1. Basics: party, incumbent or challenger, occupation, experience.\n2. Record: key votes, bills sponsored, executive actions, attendance, controversies (challengers: prior offices, work history, public statements).\n3. Answering vs. attacking: review debates, forums, interviews, questionnaires, and ads. Do they answer directly, dodge, or pivot to attacks? Give 1-2 specific examples and note any debates they skipped.\n4. Campaign funding: total raised and spent; small donors vs large donors vs PACs, corporations, unions; top donors and industries; super PAC or dark-money spending for or against them (FEC.gov, OpenSecrets, FollowTheMoney, state portals).\n5. Promise-keeping: major past promises and whether each was kept, partly kept, broken, or untestable. For first-time candidates, list current promises instead.\n6. Positions on the top issues for that office, in their own words.\n7. Endorsements for and against.\n8. Fact-checks, ethics complaints, legal issues, corrections.\n9. What the office does, term length, and what is at stake.\n\nFor each ballot measure: plain-language summary, what YES and NO do, who funds each side, who supports and opposes it, fiscal impact.\n\nOrganize by race, end each race with a side-by-side table, and finish with a quick box of voting dates, deadlines, ID rules, and polling place.\n\n" + RULES;
+}
+var $=function(i){return document.getElementById(i)};
+$("make").onclick=function(){
+  var a=$("addr").value.trim();
+  if(!a){$("addr").focus();$("addr").placeholder="Enter your address first";return}
+  var len=document.querySelector('input[name=len]:checked').value;
+  $("txt").value=brief(a,len);
+  $("out").hidden=false;
+  $("msg").textContent="";
+};
+$("copy").onclick=function(){
+  var t=$("txt");t.select();
+  var done=function(){$("msg").textContent="Copied. Paste it into your AI assistant."};
+  try{ if(navigator.clipboard){navigator.clipboard.writeText(t.value).then(done,function(){document.execCommand("copy");done()})}else{document.execCommand("copy");done()} }
+  catch(e){$("msg").textContent="Select the text and copy it manually."}
+};
+</script>
+</body>
+</html>
